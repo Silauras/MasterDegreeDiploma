@@ -8,6 +8,7 @@ public interface Config {
     String TITLE = "Oleg's Diploma";
 
     int NUM_POINTS = 100;   // количество точек на сфере
+    float POINT_SIZE = 4f; // для рендера в режиме POINTS
     double SPHERE_RADIUS = 1.0;
 
 

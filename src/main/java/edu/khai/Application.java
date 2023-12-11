@@ -5,6 +5,9 @@ import com.jogamp.opengl.awt.GLCanvas;
 import edu.khai.listener.ControlsListener;
 import edu.khai.listener.GLRenderer;
 import edu.khai.renderer.UniversalRenderer;
+import lombok.extern.apachecommons.CommonsLog;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 
 import javax.swing.*;
@@ -13,6 +16,7 @@ import java.awt.event.*;
 
 import static edu.khai.Config.*;
 
+@Log
 public class Application extends Frame {
 
     private final Camera camera;
@@ -33,7 +37,7 @@ public class Application extends Frame {
         setLocation(100, 100);
         this.camera = Camera.getInstance();
         this.universalRenderer = new UniversalRenderer();
-        universalRenderer.setRenderMode(UniversalRenderer.Mode.POINTS);
+        universalRenderer.setRenderMode(UniversalRenderer.Mode.TRIANGLES);
         initJOGL();
         setVisible(true);
     }
@@ -59,6 +63,7 @@ public class Application extends Frame {
     }
 
     public static void main(String[] args) {
+        log.info("Application started");
         new Application();
     }
 }

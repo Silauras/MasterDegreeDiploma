@@ -1,4 +1,4 @@
-package edu.khai.math;
+package edu.khai.math.structure;
 
 import lombok.AllArgsConstructor;
 

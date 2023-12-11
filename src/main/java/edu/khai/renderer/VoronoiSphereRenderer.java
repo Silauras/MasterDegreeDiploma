@@ -2,17 +2,15 @@ package edu.khai.renderer;
 
 import com.jogamp.opengl.GL2;
 import edu.khai.PointGenerator;
-import edu.khai.math.Edge;
-import edu.khai.math.Point;
-import edu.khai.math.Triangle;
+import edu.khai.math.structure.Edge;
+import edu.khai.math.structure.Point;
+import edu.khai.math.structure.Triangle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.khai.Config.SPHERE_RADIUS;
-
 public class VoronoiSphereRenderer {
-    private static Point[] spherePoints = new PointGenerator().generatePoints();
+    private static List<Point> spherePoints = new PointGenerator().generatePoints();
     public static void drawVoronoiSphere(GL2 gl, float rotateX, float rotateY) {
 
 
@@ -41,7 +39,7 @@ public class VoronoiSphereRenderer {
         List<Triangle> triangles = new ArrayList<>();
 
         // Вычисление диаграммы Делоне
-        List<Triangle> delaunayTriangles = computeDelaunayTriangulation(points);
+        List<Triangle> delaunayTriangles = new ArrayList<>() /*computeDelaunayTriangulation(points)*/;
 
         // Построение выпуклой оболочки
         List<Triangle> convexHull = computeConvexHull(points);
@@ -56,51 +54,51 @@ public class VoronoiSphereRenderer {
         return triangles;
     }
 
-    private static List<Triangle> computeDelaunayTriangulation(List<Point> points) {
-        List<Triangle> triangles = new ArrayList<>();
-
-        if (points.size() < 3) {
-            // Для менее чем трех точек триангуляция не требуется
-            return triangles;
-        }
-
-        // Добавим первые три точки в триангуляцию
-        triangles.add(new Triangle(points.get(0), points.get(1), points.get(2)));
-
-        // Перебор оставшихся точек
-        for (int i = 3; i < points.size(); i++) {
-            Point newPoint = points.get(i);
-
-            // Список треугольников, подлежащих удалению
-            List<Triangle> trianglesToRemove = new ArrayList<>();
-
-            // Перебор всех существующих треугольников
-            for (Triangle triangle : triangles) {
-                if (triangle.isPointInsideCircumcircle(newPoint)) {
-                    // Точка внутри описанной окружности треугольника
-                    trianglesToRemove.add(triangle);
-                }
-            }
-
-            // Формируем новые треугольники, используя текущую точку
-            List<Edge> edges = new ArrayList<>();
-
-            for (Triangle triangle : trianglesToRemove) {
-                edges.add(new Edge(triangle.getVertex(0), triangle.getVertex(1)));
-                edges.add(new Edge(triangle.getVertex(1), triangle.getVertex(2)));
-                edges.add(new Edge(triangle.getVertex(2), triangle.getVertex(0)));
-            }
-
-            // Удаляем треугольники, которые будут заменены новыми
-            triangles.removeAll(trianglesToRemove);
-
-            for (Edge edge : edges) {
-                triangles.add(new Triangle(edge.start, edge.end, newPoint));
-            }
-        }
-
-        return triangles;
-    }
+//    private static List<Triangle> computeDelaunayTriangulation(List<Point> points) {
+//        List<Triangle> triangles = new ArrayList<>();
+//
+//        if (points.size() < 3) {
+//            // Для менее чем трех точек триангуляция не требуется
+//            return triangles;
+//        }
+//
+//        // Добавим первые три точки в триангуляцию
+//        triangles.add(new Triangle(points.get(0), points.get(1), points.get(2)));
+//
+//        // Перебор оставшихся точек
+//        for (int i = 3; i < points.size(); i++) {
+//            Point newPoint = points.get(i);
+//
+//            // Список треугольников, подлежащих удалению
+//            List<Triangle> trianglesToRemove = new ArrayList<>();
+//
+//            // Перебор всех существующих треугольников
+//            for (Triangle triangle : triangles) {
+////                if (triangle.isPointInsideCircumcircle(newPoint)) {
+//                    // Точка внутри описанной окружности треугольника
+//                    trianglesToRemove.add(triangle);
+//                }
+//            }
+//
+//            // Формируем новые треугольники, используя текущую точку
+//            List<Edge> edges = new ArrayList<>();
+//
+//            for (Triangle triangle : trianglesToRemove) {
+//                edges.add(new Edge(triangle.getVertex(0), triangle.getVertex(1)));
+//                edges.add(new Edge(triangle.getVertex(1), triangle.getVertex(2)));
+//                edges.add(new Edge(triangle.getVertex(2), triangle.getVertex(0)));
+//            }
+//
+//            // Удаляем треугольники, которые будут заменены новыми
+//            triangles.removeAll(trianglesToRemove);
+//
+//            for (Edge edge : edges) {
+//                triangles.add(new Triangle(edge.start, edge.end, newPoint));
+//            }
+//        }
+//
+//        return triangles;
+//    }
 
     private static List<Triangle> computeConvexHull(List<Point> points) {
         // Ваш код для построения выпуклой оболочки
